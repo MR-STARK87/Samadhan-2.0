@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Modern Task Manager</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        padding: 40px 20px;
+        font-family: "Inter", sans-serif;
+        background: #e5eaf0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+      }
+      .container {
+        background: #f8fafc;
+        border-radius: 20px;
+        padding: 32px;
+        width: 400px;
+        box-shadow: 10px 10px 20px #d1d9e6, -10px -10px 20px #ffffff;
+      }
+      h2 {
+        margin: 0 0 24px;
+        font-size: 1.6rem;
+        font-weight: 700;
+        color: #1e293b;
+        text-align: center;
+      }
+      form {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 24px;
+      }
+      input {
+        flex: 1;
+        padding: 12px;
+        font-size: 1rem;
+        border-radius: 14px;
+        border: none;
+        background: #f8fafc;
+        box-shadow: inset 6px 6px 12px #d1d9e6, inset -6px -6px 12px #ffffff;
+        outline: none;
+        transition: box-shadow 0.3s ease;
+      }
+      input:focus {
+        box-shadow: inset 4px 4px 8px #d1d9e6, inset -4px -4px 8px #ffffff;
+      }
+      button {
+        background: #2563eb;
+        color: #fff;
+        border: none;
+        border-radius: 14px;
+        padding: 12px 20px;
+        font-size: 0.95rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.3s ease, transform 0.2s ease;
+      }
+      button:hover {
+        background: #1e40af;
+        transform: translateY(-2px);
+      }
+      ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      li {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 14px 18px;
+        border-radius: 14px;
+        background: #f8fafc;
+        font-size: 1rem;
+        color: #374151;
+        box-shadow: 6px 6px 12px #d1d9e6, -6px -6px 12px #ffffff;
+        transition: transform 0.2s ease;
+      }
+      li:hover {
+        transform: translateY(-3px);
+      }
+      .delete {
+        background: #ef4444;
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        padding: 6px 12px;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: background 0.25s ease;
+      }
+      .delete:hover {
+        background: #b91c1c;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script
+      src="https://unpkg.com/react@18/umd/react.development.js"
+      crossorigin
+    ></script>
+    <script
+      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+      crossorigin
+    ></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script type="text/babel">
+      const { useState } = React;
+
+      function TodoList() {
+        const [tasks, setTasks] = useState([]);
+        const [input, setInput] = useState("");
+
+        const handleAdd = (e) => {
+          e.preventDefault();
+          if (!input.trim()) return;
+          setTasks([...tasks, input.trim()]);
+          setInput("");
+        };
+
+        const handleRemove = (index) => {
+          setTasks(tasks.filter((_, i) => i !== index));
+        };
+
+        return (
+          <div className="container">
+            <h2>My Tasks</h2>
+            <form onSubmit={handleAdd}>
+              <input
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                placeholder="Type a task..."
+              />
+              <button type="submit">Add</button>
+            </form>
+            <ul>
+              {tasks.map((task, idx) => (
+                <li key={idx}>
+                  {task}
+                  <button className="delete" onClick={() => handleRemove(idx)}>
+                    x
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById("root")).render(<TodoList />);
+    </script>
+  </body>
+</html>
