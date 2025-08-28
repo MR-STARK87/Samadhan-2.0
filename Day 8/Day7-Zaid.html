@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Local State To‑Do</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        background: #f4f6f8;
+        color: #1e293b;
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+      }
+      .app {
+        background: #fff;
+        border-radius: 12px;
+        padding: 20px;
+        width: 320px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+      }
+      h2 {
+        margin-top: 0;
+        font-size: 1.25rem;
+      }
+      form {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 16px;
+      }
+      input {
+        flex: 1;
+        padding: 8px;
+        border-radius: 6px;
+        border: 1px solid #cbd5e1;
+        font-size: 0.95rem;
+      }
+      button {
+        padding: 8px 12px;
+        border: none;
+        border-radius: 6px;
+        background: #3b82f6;
+        color: #fff;
+        font-weight: 500;
+        cursor: pointer;
+      }
+      ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      li {
+        display: flex;
+        justify-content: space-between;
+        padding: 6px 0;
+        border-bottom: 1px solid #e2e8f0;
+        font-size: 0.95rem;
+      }
+      .remove {
+        background: #ef4444;
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-size: 0.8rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <script
+      src="https://unpkg.com/react@18/umd/react.development.js"
+      crossorigin
+    ></script>
+    <script
+      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+      crossorigin
+    ></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script type="text/babel">
+      const { useState } = React;
+
+      function TodoApp() {
+        const [items, setItems] = useState([]);
+        const [text, setText] = useState("");
+
+        const addItem = (e) => {
+          e.preventDefault();
+          if (!text.trim()) return;
+          setItems([...items, text.trim()]);
+          setText("");
+        };
+
+        const removeItem = (index) => {
+          setItems(items.filter((_, i) => i !== index));
+        };
+
+        return (
+          <div className="app">
+            <h2>To‑Do List</h2>
+            <form onSubmit={addItem}>
+              <input
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+                placeholder="Add new task..."
+              />
+              <button type="submit">Add</button>
+            </form>
+            <ul>
+              {items.map((task, idx) => (
+                <li key={idx}>
+                  {task}
+                  <button className="remove" onClick={() => removeItem(idx)}>
+                    x
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById("app")).render(<TodoApp />);
+    </script>
+  </body>
+</html>
