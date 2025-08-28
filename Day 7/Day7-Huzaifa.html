@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Counter & Preview</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 20px;
+        font-family: system-ui, sans-serif;
+        background: #eef1f5;
+        color: #1e293b;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .card {
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 24px;
+        max-width: 420px;
+        width: 100%;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      }
+      h2 {
+        margin-top: 0;
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #0f172a;
+      }
+      button {
+        margin: 4px;
+        padding: 8px 14px;
+        border: none;
+        border-radius: 8px;
+        background: #3b82f6;
+        color: white;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background 0.2s ease;
+      }
+      button:hover {
+        background: #2563eb;
+      }
+      textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        font-family: inherit;
+        resize: vertical;
+        font-size: 0.95rem;
+      }
+      p {
+        background: #f8fafc;
+        padding: 10px;
+        border-radius: 8px;
+        min-height: 1.4em;
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <script
+      src="https://unpkg.com/react@18/umd/react.development.js"
+      crossorigin
+    ></script>
+    <script
+      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+      crossorigin
+    ></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script type="text/babel">
+      const { useState } = React;
+
+      function CounterCard() {
+        const [count, setCount] = useState(0);
+        return (
+          <div className="card">
+            <h2>Count: {count}</h2>
+            <button onClick={() => setCount(count + 1)}>+</button>
+            <button onClick={() => setCount(count - 1)}>-</button>
+            <button onClick={() => setCount(0)}>Reset</button>
+          </div>
+        );
+      }
+
+      function PreviewCard() {
+        const [text, setText] = useState("");
+        return (
+          <div className="card">
+            <h2>Live Preview</h2>
+            <textarea
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              placeholder="Type something..."
+            />
+            <p>{text}</p>
+          </div>
+        );
+      }
+
+      function App() {
+        return (
+          <div>
+            <CounterCard />
+            <PreviewCard />
+          </div>
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById("app")).render(<App />);
+    </script>
+  </body>
+</html>
