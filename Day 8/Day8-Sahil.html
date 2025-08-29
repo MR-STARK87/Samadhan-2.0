@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Tasks Manager</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        padding: 40px 20px;
+        font-family: "Inter", sans-serif;
+        background: #f5f7fa;
+        display: flex;
+        justify-content: center;
+        min-height: 100vh;
+      }
+      .container {
+        background: #fff;
+        border-radius: 14px;
+        padding: 24px;
+        width: 360px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+      }
+      h2 {
+        margin: 0 0 18px;
+        font-size: 1.4rem;
+        font-weight: 600;
+        color: #111827;
+        text-align: center;
+      }
+      form {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+      input {
+        flex: 1;
+        padding: 10px 12px;
+        font-size: 1rem;
+        border-radius: 10px;
+        border: 1px solid #d1d5db;
+        outline: none;
+      }
+      input:focus {
+        border-color: #3b82f6;
+      }
+      button {
+        background: #2563eb;
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        padding: 10px 16px;
+        font-size: 0.95rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background 0.25s ease;
+      }
+      button:hover {
+        background: #1d4ed8;
+      }
+      ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      li {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #f9fafb;
+        padding: 10px 14px;
+        border-radius: 10px;
+        font-size: 0.95rem;
+        color: #374151;
+      }
+      .delete {
+        background: #ef4444;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        padding: 4px 10px;
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition: background 0.25s ease;
+      }
+      .delete:hover {
+        background: #dc2626;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script
+      src="https://unpkg.com/react@18/umd/react.development.js"
+      crossorigin
+    ></script>
+    <script
+      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+      crossorigin
+    ></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script type="text/babel">
+      const { useState } = React;
+
+      function TodoList() {
+        const [tasks, setTasks] = useState([]);
+        const [input, setInput] = useState("");
+
+        const handleAdd = (e) => {
+          e.preventDefault();
+          if (!input.trim()) return;
+          setTasks([...tasks, input.trim()]);
+          setInput("");
+        };
+
+        const handleRemove = (index) => {
+          setTasks(tasks.filter((_, i) => i !== index));
+        };
+
+        return (
+          <div className="container">
+            <h2>Task Manager</h2>
+            <form onSubmit={handleAdd}>
+              <input
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                placeholder="Add a task..."
+              />
+              <button type="submit">Add</button>
+            </form>
+            <ul>
+              {tasks.map((task, idx) => (
+                <li key={idx}>
+                  {task}
+                  <button className="delete" onClick={() => handleRemove(idx)}>
+                    x
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById("root")).render(<TodoList />);
+    </script>
+  </body>
+</html>
