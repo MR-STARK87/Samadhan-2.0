@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Student Directory</title>
+    <script
+      crossorigin
+      src="https://unpkg.com/react@18/umd/react.development.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/babel-standalone@6/babel.min.js"
+    ></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f9fafc;
+        padding: 20px;
+      }
+      h1 {
+        text-align: center;
+        color: #333;
+      }
+      ul {
+        list-style: none;
+        padding: 0;
+        max-width: 400px;
+        margin: 20px auto;
+      }
+      li {
+        background: #fff;
+        margin: 10px 0;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: space-between;
+      }
+      .name {
+        font-weight: bold;
+      }
+      .course {
+        color: #666;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Student Directory</h1>
+    <div id="root"></div>
+
+    <script type="text/babel">
+      function App() {
+        const [students, setStudents] = React.useState([]);
+
+        React.useEffect(() => {
+          fetch("http://localhost:5000/api/students")
+            .then((res) => res.json())
+            .then((data) => setStudents(data))
+            .catch((err) => console.error(err));
+        }, []);
+
+        return (
+          <div>
+            {students.length === 0 ? (
+              <p style={{ textAlign: "center" }}>Loading...</p>
+            ) : (
+              <ul>
+                {students.map((s) => (
+                  <li key={s.id}>
+                    <span className="name">{s.name}</span>
+                    <span className="course">{s.course}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        );
+      }
+
+      const root = ReactDOM.createRoot(document.getElementById("root"));
+      root.render(<App />);
+    </script>
+  </body>
+</html>
