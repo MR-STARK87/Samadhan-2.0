@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Advanced Student Directory</title>
+
+    <script
+      crossorigin
+      src="https://unpkg.com/react@18/umd/react.development.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/babel-standalone@6/babel.min.js"
+    ></script>
+
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: #eef2f5;
+        padding: 20px;
+      }
+      h1 {
+        text-align: center;
+        color: #222;
+      }
+      .cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        max-width: 900px;
+        margin: 20px auto;
+      }
+      .card {
+        background: #fff;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+      .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      }
+      .name {
+        font-weight: bold;
+        font-size: 1.2em;
+        margin-bottom: 8px;
+      }
+      .detail {
+        color: #555;
+        margin: 4px 0;
+      }
+      .error {
+        color: red;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Advanced Student Directory</h1>
+    <div id="root"></div>
+
+    <script type="text/babel">
+      function StudentDirectory() {
+        const [students, setStudents] = React.useState([]);
+        const [loading, setLoading] = React.useState(true);
+        const [error, setError] = React.useState(null);
+
+        React.useEffect(() => {
+          fetch("http://localhost:5001/api/students")
+            .then((res) => {
+              if (!res.ok) throw new Error("Failed to fetch");
+              return res.json();
+            })
+            .then((data) => {
+              setStudents(data);
+              setLoading(false);
+            })
+            .catch((err) => {
+              setError(err.message);
+              setLoading(false);
+            });
+        }, []);
+
+        if (loading)
+          return <p style={{ textAlign: "center" }}>Loading students...</p>;
+        if (error) return <p className="error">{error}</p>;
+
+        return (
+          <div className="cards">
+            {students.map((s) => (
+              <div key={s.uid} className="card">
+                <div className="name">{s.fullName}</div>
+                <div className="detail">Age: {s.age}</div>
+                <div className="detail">Grade: {s.grade}</div>
+                <div className="detail">Email: {s.email}</div>
+              </div>
+            ))}
+          </div>
+        );
+      }
+
+      const root = ReactDOM.createRoot(document.getElementById("root"));
+      root.render(<StudentDirectory />);
+    </script>
+  </body>
+</html>
