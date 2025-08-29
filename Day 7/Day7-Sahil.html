@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Interactive Cards</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        padding: 40px 20px;
+        font-family: "Inter", sans-serif;
+        background: #f4f6fa;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        min-height: 100vh;
+      }
+      .wrapper {
+        display: grid;
+        gap: 24px;
+        width: 100%;
+        max-width: 500px;
+      }
+      .box {
+        background: #fff;
+        padding: 24px;
+        border-radius: 16px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+      }
+      h2 {
+        margin: 0 0 16px;
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: #111827;
+      }
+      .controls {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      button {
+        background: #2563eb;
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        padding: 10px 16px;
+        font-size: 0.95rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background 0.25s ease;
+      }
+      button:hover {
+        background: #1d4ed8;
+      }
+      textarea {
+        width: 100%;
+        min-height: 80px;
+        padding: 12px;
+        font-size: 1rem;
+        border: 1px solid #d1d5db;
+        border-radius: 10px;
+        resize: vertical;
+        outline: none;
+      }
+      .preview {
+        background: #f9fafb;
+        margin-top: 12px;
+        padding: 12px;
+        border-radius: 10px;
+        font-size: 1rem;
+        color: #374151;
+        min-height: 1.5em;
+        white-space: pre-wrap;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script
+      src="https://unpkg.com/react@18/umd/react.development.js"
+      crossorigin
+    ></script>
+    <script
+      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+      crossorigin
+    ></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script type="text/babel">
+      const { useState } = React;
+
+      function Counter() {
+        const [value, setValue] = useState(0);
+        return (
+          <div className="box">
+            <h2>Counter: {value}</h2>
+            <div className="controls">
+              <button onClick={() => setValue(value + 1)}>Increase</button>
+              <button onClick={() => setValue(value - 1)}>Decrease</button>
+              <button onClick={() => setValue(0)}>Reset</button>
+            </div>
+          </div>
+        );
+      }
+
+      function LivePreview() {
+        const [input, setInput] = useState("");
+        return (
+          <div className="box">
+            <h2>Live Preview</h2>
+            <textarea
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="Start typing..."
+            />
+            <div className="preview">{input}</div>
+          </div>
+        );
+      }
+
+      function App() {
+        return (
+          <div className="wrapper">
+            <Counter />
+            <LivePreview />
+          </div>
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+    </script>
+  </body>
+</html>
