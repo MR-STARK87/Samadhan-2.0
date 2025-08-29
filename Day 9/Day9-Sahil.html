@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Student Directory Dark Mode</title>
+
+    <script
+      crossorigin
+      src="https://unpkg.com/react@18/umd/react.development.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/babel-standalone@6/babel.min.js"
+    ></script>
+
+    <style>
+      body {
+        font-family: "Roboto", sans-serif;
+        background: #1e1e2f;
+        color: #f0f0f0;
+        margin: 0;
+        padding: 20px;
+      }
+
+      h1 {
+        text-align: center;
+        color: #fff;
+        text-shadow: 1px 1px 4px #000;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        max-width: 1000px;
+        margin: 20px auto;
+      }
+
+      .card {
+        background: linear-gradient(145deg, #2b2b3c, #3c3c50);
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+
+      .card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
+      }
+
+      .name {
+        font-size: 1.3em;
+        font-weight: bold;
+        margin-bottom: 10px;
+        color: #ffecb3;
+      }
+
+      .detail {
+        font-size: 0.95em;
+        color: #cfcfcf;
+        margin: 3px 0;
+      }
+
+      .error {
+        text-align: center;
+        color: #ff6b6b;
+      }
+
+      p.loading {
+        text-align: center;
+        font-size: 1.1em;
+        margin-top: 50px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Student Directory</h1>
+    <div id="root"></div>
+
+    <script type="text/babel">
+      function Directory() {
+        const [students, setStudents] = React.useState([]);
+        const [loading, setLoading] = React.useState(true);
+        const [error, setError] = React.useState(null);
+
+        React.useEffect(() => {
+          fetch("http://localhost:5050/api/students")
+            .then((res) => {
+              if (!res.ok) throw new Error("Could not fetch students");
+              return res.json();
+            })
+            .then((data) => {
+              setStudents(data);
+              setLoading(false);
+            })
+            .catch((err) => {
+              setError(err.message);
+              setLoading(false);
+            });
+        }, []);
+
+        if (loading) return <p className="loading">Loading students...</p>;
+        if (error) return <p className="error">{error}</p>;
+
+        return (
+          <div className="grid">
+            {students.map((s) => (
+              <div key={s.sid} className="card">
+                <div className="name">{s.name}</div>
+                <div className="detail">Age: {s.age}</div>
+                <div className="detail">Grade: {s.grade}</div>
+                <div className="detail">Email: {s.email}</div>
+              </div>
+            ))}
+          </div>
+        );
+      }
+
+      const root = ReactDOM.createRoot(document.getElementById("root"));
+      root.render(<Directory />);
+    </script>
+  </body>
+</html>
