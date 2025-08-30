@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>To-Do App (React + API)</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/modern-css-reset/dist/reset.min.css"
+    />
+    <style>
+      body {
+        font-family: "Segoe UI", Arial, sans-serif;
+        background: #f7f7f7;
+        color: #222;
+      }
+      .container {
+        max-width: 500px;
+        margin: 40px auto;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        padding: 2rem;
+      }
+      h1 {
+        text-align: center;
+        margin-bottom: 1.5rem;
+      }
+      form {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 1.5rem;
+      }
+      input[type="text"] {
+        flex: 1;
+        padding: 0.5rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+      button {
+        padding: 0.5rem 1.2rem;
+        border: none;
+        border-radius: 4px;
+        background: #4caf50;
+        color: #fff;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      button:disabled {
+        background: #bbb;
+        cursor: not-allowed;
+      }
+      ul {
+        list-style: none;
+        padding: 0;
+      }
+      li {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.7rem 0.5rem;
+        border-bottom: 1px solid #eee;
+      }
+      .todo-text {
+        flex: 1;
+      }
+      .delete-btn {
+        background: #f44336;
+        margin-left: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script
+      crossorigin
+      src="https://unpkg.com/react@18/umd/react.development.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+    ></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="text/babel">
+      const { useState, useEffect } = React;
+      const API_URL = "http://localhost:5000/todos";
+
+      function App() {
+        const [todos, setTodos] = useState([]);
+        const [input, setInput] = useState("");
+        const [loading, setLoading] = useState(false);
+        const [error, setError] = useState("");
+
+        useEffect(() => {
+          fetchTodos();
+        }, []);
+
+        async function fetchTodos() {
+          setLoading(true);
+          setError("");
+          try {
+            const res = await fetch(API_URL);
+            const data = await res.json();
+            setTodos(data);
+          } catch (err) {
+            setError("Failed to fetch todos");
+          }
+          setLoading(false);
+        }
+
+        async function addTodo(e) {
+          e.preventDefault();
+          if (!input.trim()) return;
+          setError("");
+          try {
+            const res = await fetch(API_URL, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ text: input }),
+            });
+            if (!res.ok) throw new Error("Failed to add todo");
+            const newTodo = await res.json();
+            setTodos([...todos, newTodo]);
+            setInput("");
+          } catch (err) {
+            setError("Failed to add todo");
+          }
+        }
+
+        async function deleteTodo(id) {
+          setError("");
+          try {
+            const res = await fetch(`${API_URL}/${id}`, { method: "DELETE" });
+            if (!res.ok) throw new Error("Failed to delete todo");
+            setTodos(todos.filter((t) => t.id !== id));
+          } catch (err) {
+            setError("Failed to delete todo");
+          }
+        }
+
+        return (
+          <div className="container">
+            <h1>To-Do App</h1>
+            <form onSubmit={addTodo}>
+              <input
+                type="text"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                placeholder="Add a new task..."
+              />
+              <button type="submit" disabled={!input.trim()}>
+                Add
+              </button>
+            </form>
+            {error && (
+              <div style={{ color: "#f44336", marginBottom: "1rem" }}>
+                {error}
+              </div>
+            )}
+            {loading ? (
+              <div>Loading...</div>
+            ) : (
+              <ul>
+                {todos.length === 0 ? (
+                  <li>No tasks yet!</li>
+                ) : (
+                  todos.map((todo) => (
+                    <li key={todo.id}>
+                      <span className="todo-text">{todo.text}</span>
+                      <button
+                        className="delete-btn"
+                        onClick={() => deleteTodo(todo.id)}
+                      >
+                        Delete
+                      </button>
+                    </li>
+                  ))
+                )}
+              </ul>
+            )}
+          </div>
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+    </script>
+  </body>
+</html>
