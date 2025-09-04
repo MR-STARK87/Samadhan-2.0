@@ -1,0 +1,22 @@
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  background: #f2f2f2;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  padding: 20px;
+}
+
+#map {
+  height: 400px;
+  margin-top: 20px;
+  border-radius: 10px;
+}
+
+#weather {
+  margin-top: 20px;
+  font-size: 18px;
+}
