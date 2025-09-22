@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RETRO Chat</title>
+  <link rel="stylesheet" href="chat.css">
+  <link
+    href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
+    rel="stylesheet"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=Orbitron:wght@400;700;900&display=swap"
+    rel="stylesheet"
+  />
+</head>
+<body>
+  <header>
+    <div class="logo"><span>RETRO </span></div>
+    <ul class="navbar">
+      <li><a href="#" class="hideOnMobile"><i class="ri-leaf-fill"></i>Den</a></li>
+      <li><a href="#" class="active hideOnMobile"><i class="ri-chat-ai-fill"></i>Chat</a></li>
+      <li><a href="#" class="hideOnMobile"><i class="ri-book-fill"></i>Notes</a></li>
+      <li><a href="#" class="hideOnMobile"><i class="ri-stack-fill"></i>Cards</a></li>
+      <li><a href="#" class="hideOnMobile"><i class="ri-mic-ai-fill"></i>Narration</a></li>
+    </ul>
+    <div class="main">
+      <a href="#" class="user"><i class="ri-user-fill"></i>Sign In</a>
+      <a href="#">Register</a>
+      <div class="menu-button" id="menu-icon">
+        <i class="ri-menu-line"></i>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Navigation Overlay -->
+  <div class="mobile-nav" id="mobileNav">
+    <button class="close-mobile-nav" id="closeMobileNav">
+      <i class="ri-close-line"></i>
+    </button>
+    <ul class="nav-list">
+      <li><a href="#"><i class="ri-leaf-fill"></i>Den</a></li>
+      <li><a href="#" class="active"><i class="ri-chat-ai-fill"></i>Chat</a></li>
+      <li><a href="#"><i class="ri-book-fill"></i>Notes</a></li>
+      <li><a href="#"><i class="ri-stack-fill"></i>Cards</a></li>
+      <li><a href="#"><i class="ri-mic-ai-fill"></i>Narration</a></li>
+    </ul>
+    <div class="mobile-auth">
+      <a href="#"><i class="ri-user-fill"></i> Sign In</a>
+      <a href="#">Register</a>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <!-- Chat Section -->
+    <div class="chat-container">
+      <div class="chat-header">
+        <div class="chat-title">
+          <i class="ri-robot-fill"></i>
+          <h1>RETRO AI Assistant</h1>
+        </div>
+      </div>
+      
+      <div class="chat-messages" id="chatMessages">
+        <div class="message bot-message">
+          <div class="message-avatar">
+            <i class="ri-robot-fill"></i>
+          </div>
+          <div class="message-content">
+            <div class="message-text">
+              Hello! I'm your RETRO AI assistant. How can I help you today?
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="typing-indicator" id="typingIndicator">
+        <div class="typing-avatar">
+          <i class="ri-robot-fill"></i>
+        </div>
+        <div class="typing-text">
+          <span>RETRO AI is typing</span>
+          <div class="typing-dots">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="chat-input-container">
+        <button class="attach-button" title="Attach file">
+          <i class="ri-attachment-2"></i>
+        </button>
+        <input type="text" class="chat-input" id="chatInput" placeholder="Type your message here..." maxlength="500">
+        <button class="send-button" id="sendButton" title="Send message">
+          <i class="ri-send-plane-fill"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Reference Notes Section -->
+    <div class="reference-section">
+      <div class="reference-header">
+        <div class="reference-title">
+          <i class="ri-settings-3-line"></i>
+          <h2>Preferences</h2>
+        </div>
+        <button class="add-note-btn" id="addNoteBtn" title="Add new preference">
+          <i class="ri-add-line"></i>
+        </button>
+      </div>
+      
+      <div class="notes-container" id="notesContainer">
+        <div class="note-item pinned">
+          <div class="note-header">
+            <span class="note-title">Welcome Preference</span>
+            <div class="note-actions">
+              <button class="note-pin pinned" onclick="togglePin(this)" title="Pinned preference">
+                <i class="ri-pushpin-fill"></i>
+              </button>
+              <button class="note-delete" title="Delete preference">
+                <i class="ri-delete-bin-line"></i>
+              </button>
+            </div>
+          </div>
+          <div class="note-content">
+            Customize your RETRO AI experience. Pin important preferences to keep them at the top.
+          </div>
+          <div class="note-timestamp">Just now</div>
+        </div>
+      </div>
+      
+      <div class="note-input-section" id="noteInputSection" style="display: none;">
+        <input type="text" class="note-title-input" id="noteTitleInput" placeholder="Note title...">
+        <textarea class="note-content-input" id="noteContentInput" placeholder="Write your note here..."></textarea>
+        <div class="note-actions">
+          <button class="save-note-btn" id="saveNoteBtn">Save</button>
+          <button class="cancel-note-btn" id="cancelNoteBtn">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="chat.js"></script>
+</body>
+</html>
